@@ -11,7 +11,7 @@ module.exports = {
 	    });
 
 	    app.put('/image', function(req, res) {
-	      image.update(req.body, res);
+	      image.put(req.body, res);
 	    });
 
 	    app.delete('/image/:id/', function(req, res) {

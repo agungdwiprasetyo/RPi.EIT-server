@@ -5,7 +5,7 @@ function Image() {
 
   this.get = function(req, res) {
     connection.acquire(function(err, con) {
-      con.query('SELECT * FROM image INNER JOIN data_ukur ON image.id_data=data_ukur.id_data INNER JOIN algoritma ON image.id_algor=algoritma.id_algor', function(err, result) {
+      con.query('select * from algoritma', function(err, result) {
         con.release();
         res.send(result);
       });
@@ -14,8 +14,8 @@ function Image() {
 
   this.post = function(req, res) {
     connection.acquire(function(err, con) {
-      var creds = [req.nama, req.data, req.algoritma, req.kerapatan, req.arus_injeksi];
-      var query = 'insert into image (nama, id_data, id_algor, kerapatan, arus_injeksi) values (?, ?, ?, ?, ?)';
+      var creds = [req.nama_algor];
+      var query = 'insert into algoritma (nama_algor) values (?)';
 
       con.query(query, creds, function(err, result) {
         con.release();
@@ -29,9 +29,9 @@ function Image() {
   };
 
   this.put = function(req, res) {
-    var data = [parseFloat(req.kerapatan), parseInt(req.id_image)];
+    var data = [req.nama_algor, parseInt(req.id_algor)];
     connection.acquire(function(err, con) {
-      var query = 'UPDATE image SET kerapatan = ? WHERE id_image = ?';
+      var query = 'UPDATE algoritma SET nama_algor = ? WHERE id_algor = ?';
       con.query(query, data, function(err, result) {
         con.release();
         if (err) {
@@ -45,7 +45,7 @@ function Image() {
 
   this.delete = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('delete from image where id_image = ?', [id], function(err, result) {
+      con.query('delete from algoritma where id_algor = ?', [id], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 0, message: 'Delete failed'});

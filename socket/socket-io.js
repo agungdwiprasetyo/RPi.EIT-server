@@ -47,12 +47,7 @@ module.exports.listen = function(server) {
 		socket.on('runReconstruction', function(data){
 			console.log(data);
 			if(data['status']){
-				socket.broadcast.emit('startReconstruction',{
-					kerapatan: data['kerapatan'],
-					arus: data['arus'],
-					data: data['data'],
-					algor: data['algor']
-				});
+				socket.broadcast.emit('startReconstruction', data);
 			}
 		});
 

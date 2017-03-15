@@ -26,3 +26,9 @@ connection.init();
 
 var imageRoute = require('./routes/image');
 imageRoute.configure(app);
+
+var dataRoute = require('./routes/data');
+dataRoute.configure(app);
+
+var dataAlgor = require('./routes/algor');
+dataAlgor.configure(app);
