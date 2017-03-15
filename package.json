@@ -1,0 +1,29 @@
+{
+  "name": "RPi.EIT",
+  "version": "0.0.1",
+  "description": "Server-side to processing the image reconstruction on Electrical Impedance Tomography",
+  "main": "index.js",
+  "private": true,
+  "license": "BSD",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/agungdwiprasetyo/RPi.EIT-server"
+  },
+  "dependencies": {
+    "express": "4.13.4",
+    "body-parser": "^1.14.1",
+    "jsonwebtoken": "^7.1.9",
+    "mysql": "^2.9.0",
+    "debug": "2.2.0",
+    "engine.io": "1.7.2",
+    "has-binary": "0.1.7",
+    "object-assign": "4.1.0",
+    "socket.io":"^1.5.1",
+    "socket.io-adapter": "0.4.0",
+    "socket.io-client": "1.5.1",
+    "socket.io-parser": "2.3.1"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
