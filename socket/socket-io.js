@@ -51,9 +51,9 @@ module.exports.listen = function(server) {
 			}
 		});
 
-		socket.on('status', function(data){
-			console.log(data['status']);
-			socket.broadcast.emit('statusBar', data);
+		socket.on('finishReconstruction', function(data){
+			console.log(data['filename']);
+			socket.broadcast.emit('notifFinish', data);
 		});
 
 		socket.on('disconnect', function(){

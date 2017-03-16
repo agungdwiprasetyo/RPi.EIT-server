@@ -1,5 +1,6 @@
 var connection = require('../connection');
 var socketio = require('../socket/socket-io');
+var fs = require('fs');
 
 function Image() {
 
@@ -14,8 +15,8 @@ function Image() {
 
   this.post = function(req, res) {
     connection.acquire(function(err, con) {
-      var creds = [req.nama, req.data, req.algoritma, req.kerapatan, req.arus_injeksi];
-      var query = 'insert into image (nama, id_data, id_algor, kerapatan, arus_injeksi) values (?, ?, ?, ?, ?)';
+      var creds = [req.nama, req.data, req.algoritma, req.kerapatan];
+      var query = 'insert into image (nama, id_data, id_algor, kerapatan) values (?, ?, ?, ?)';
 
       con.query(query, creds, function(err, result) {
         con.release();
@@ -43,9 +44,15 @@ function Image() {
     });
   };
 
-  this.delete = function(id, res) {
+  this.delete = function(req, res) {
+    var data = [req.filename];
+    var alamat = "rpieit-web/img/results/"+req.filename;
+    fs.unlink(alamat, (err) => {
+      if (err) throw err;
+      console.log('successfully deleted '+req.filename);
+    });
     connection.acquire(function(err, con) {
-      con.query('delete from image where id_image = ?', [id], function(err, result) {
+      con.query('delete from image where nama = ?', [data], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 0, message: 'Delete failed'});

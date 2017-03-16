@@ -14,8 +14,8 @@ module.exports = {
 	      image.put(req.body, res);
 	    });
 
-	    app.delete('/image/:id/', function(req, res) {
-	      image.delete(req.params.id, res);
+	    app.delete('/image', function(req, res) {
+	      image.delete(req.body, res);
 	    });
 	}
 };
