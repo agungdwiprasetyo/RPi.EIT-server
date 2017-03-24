@@ -1,4 +1,4 @@
-var connection = require('../connection');
+var connection = require('../connectDB');
 var socketio = require('../socket/socket-io');
 var fs = require('fs');
 

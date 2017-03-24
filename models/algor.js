@@ -1,11 +1,17 @@
-var connection = require('../connection');
+var connection = require('../connectDB');
 var socketio = require('../socket/socket-io');
 
 function Image() {
 
   this.get = function(req, res) {
     connection.acquire(function(err, con) {
-      con.query('select * from algoritma', function(err, result) {
+      var reqGetData = req.headers['idalgor'];
+      if(reqGetData){
+        var kueri = "SELECT * FROM algoritma WHERE id_algor = '"+reqGetData+"'";
+      }else{
+        var kueri = 'SELECT * FROM algoritma';
+      }
+      con.query(kueri, function(err, result) {
         con.release();
         res.send(result);
       });

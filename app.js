@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyparser = require('body-parser');
-var connection = require('./connection');
+var connectDB = require('./connectDB');
 var server = require('http').createServer(app);
 var io = require('./socket/socket-io').listen(server);
 var port = process.env.PORT || 1993;
@@ -22,7 +22,7 @@ app.use(express.static(__dirname + '/rpieit-web'));
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
-connection.init();
+connectDB.init();
 
 var imageRoute = require('./routes/image');
 imageRoute.configure(app);
@@ -32,3 +32,6 @@ dataRoute.configure(app);
 
 var dataAlgor = require('./routes/algor');
 dataAlgor.configure(app);
+
+var shell = require('./shell/callshell');
+shell.start();

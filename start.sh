@@ -1,2 +1,2 @@
 #!/bin/bash
-nodemon index.js
+npm start

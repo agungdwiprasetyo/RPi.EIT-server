@@ -1,11 +1,32 @@
-var connection = require('../connection');
+var connection = require('../connectDB');
 var socketio = require('../socket/socket-io');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, '/coba');
+  },
+  filename: function (req, file, callback) {
+    console.log(file);
+    callback(null, file.originalname)
+  }
+});
+
+var upload = multer({storage: storage}).single('photo');
+
 
 function Image() {
 
   this.get = function(req, res) {
     connection.acquire(function(err, con) {
-      con.query('select * from data_ukur', function(err, result) {
+      var reqGetData = req.headers['iddata'];
+      if(reqGetData){
+        var kueri = "SELECT * FROM data_ukur WHERE filename = '"+reqGetData+"'";
+      }else{
+        var kueri = 'SELECT * FROM data_ukur';
+      }
+      console.log(reqGetData);
+      con.query(kueri, function(err, result) {
         con.release();
         res.send(result);
       });
@@ -13,8 +34,12 @@ function Image() {
   };
 
   this.post = function(req, res) {
+    upload(req, res, function(err){
+      if (err) {console.log("error");return;}
+      res.end('file uploaded');
+    });
     connection.acquire(function(err, con) {
-      var creds = [req.nama_data, req.alamat_data];
+      var creds = [req.body.nama_data, req.body.alamat_data];
       var query = 'insert into data_ukur (nama_data, alamat_data) values (?, ?)';
 
       con.query(query, creds, function(err, result) {
