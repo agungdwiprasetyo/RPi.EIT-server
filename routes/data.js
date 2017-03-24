@@ -7,7 +7,7 @@ module.exports = {
 	    })
 
 	    app.post('/data', function(req, res) {
-	      data.post(req.body, res);
+	      data.post(req, res);
 	    });
 
 	    app.put('/data', function(req, res) {

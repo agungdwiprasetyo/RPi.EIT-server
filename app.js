@@ -4,6 +4,11 @@ var bodyparser = require('body-parser');
 var connectDB = require('./connectDB');
 var server = require('http').createServer(app);
 var io = require('./socket/socket-io').listen(server);
+var imageRoute = require('./routes/image');
+var dataRoute = require('./routes/data');
+var dataAlgor = require('./routes/algor');
+var shell = require('./shell/callshell');
+var upload = require('./uploads/upload');
 var port = process.env.PORT || 1993;
 
 server.listen(port, function () {
@@ -23,15 +28,9 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
 connectDB.init();
-
-var imageRoute = require('./routes/image');
-imageRoute.configure(app);
-
-var dataRoute = require('./routes/data');
-dataRoute.configure(app);
-
-var dataAlgor = require('./routes/algor');
-dataAlgor.configure(app);
-
-var shell = require('./shell/callshell');
 shell.start();
+
+imageRoute.configure(app);
+dataRoute.configure(app);
+dataAlgor.configure(app);
+upload.configure(app);
