@@ -1,11 +1,12 @@
 // Modul socket.io
-// API: raspiConnect, webConnect, runReconstruction, status, raspiStatus, webStatus
+
 var socketio = require('socket.io');
 
 module.exports.listen = function(server) {
 	var io = socketio.listen(server);
 	var numClient = 0;
 	var clients = [{raspiId: '', status: false}, {webId: '', status: false}, {androidId: '', status: false}];
+	var realtimeEIT = {algor: '', arus: '', kerapatan: '', data: ''};
 
 	io.on('connection', function(socket){
 		socket.on('raspiConnect', function(data){
@@ -19,7 +20,6 @@ module.exports.listen = function(server) {
 				online: true
 			});
 		});
-
 		socket.on('webConnect', function(data){
             clients[1].webId = socket.id;
             clients[1].status = data['status'];
@@ -31,7 +31,6 @@ module.exports.listen = function(server) {
 				online: clients[0].status
 			});
 		});
-
 		socket.on('androidConnect', function(data){
             clients[2].androidId = socket.id;
             clients[2].status = true;
@@ -50,10 +49,16 @@ module.exports.listen = function(server) {
 				socket.broadcast.emit('startReconstruction', data);
 			}
 		});
-
 		socket.on('finishReconstruction', function(data){
 			console.log(data['filename']);
 			socket.broadcast.emit('notifFinish', data);
+		});
+
+		socket.on('startGetData', function(data){
+			socket.broadcast.emit('getDataVoltage', {status: true});
+		});
+		socket.on('postDataVoltage', function(data){
+			socket.broadcast.emit('viewResultVoltage', data);
 		});
 
 		socket.on('disconnect', function(){
