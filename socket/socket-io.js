@@ -5,13 +5,15 @@ var socketio = require('socket.io');
 module.exports.listen = function(server) {
 	var io = socketio.listen(server);
 	var numClient = 0;
-	var clients = [{raspiId: '', status: false}, {webId: '', status: false}, {androidId: '', status: false}];
+	var num = 0;
+	var clients = [{raspiId: '', status: false, token: ''}, {webId: '', status: false}, {androidId: '', status: false}];
 	var realtimeEIT = {algor: '', arus: '', kerapatan: '', data: ''};
 
 	io.on('connection', function(socket){
 		socket.on('raspiConnect', function(data){
-            clients[0].raspiId = socket.id;
+            clients[0].raspiId = data['id_alat'];
             clients[0].status = data['status'];
+            clients[0].token = data['token'];
 
 			numClient++;
       		console.log("Connected raspi = " + clients[0].raspiId + " User = " + numClient);
@@ -44,21 +46,35 @@ module.exports.listen = function(server) {
 		});
 
 		socket.on('runReconstruction', function(data){
-			console.log(data);
+			// console.log(data);
 			if(data['status']){
 				socket.broadcast.emit('startReconstruction', data);
 			}
 		});
 		socket.on('finishReconstruction', function(data){
-			console.log(data['filename']);
+			console.log("data image baru: "+data['filename']);
 			socket.broadcast.emit('notifFinish', data);
 		});
 
 		socket.on('startGetData', function(data){
-			socket.broadcast.emit('getDataVoltage', {status: true});
+			socket.broadcast.emit('getDataVoltage', {
+				status: clients[0].status,
+				token: clients[0].token
+			});
 		});
 		socket.on('postDataVoltage', function(data){
-			socket.broadcast.emit('viewResultVoltage', data);
+			if (data["status"]) {
+				console.log("viewvolttage\n");
+				socket.broadcast.emit('viewResultVoltage', data);
+			}
+			num++;
+			data['status'] = false;
+			console.log(num,data['status']);
+		});
+
+		socket.on('cobago', function(data){
+			console.log(data);
+			socket.broadcast.emit('toGo', data);
 		});
 
 		socket.on('disconnect', function(){

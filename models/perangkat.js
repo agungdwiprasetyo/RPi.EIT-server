@@ -1,15 +1,15 @@
 var connection = require('../connectDB');
 var socketio = require('../socket/socket-io');
 
-function Image() {
+function Perangkat() {
 
   this.get = function(req, res) {
     connection.acquire(function(err, con) {
-      var reqGetData = req.headers['idalgor'];
+      var reqGetData = req.headers['idalat'];
       if(reqGetData){
-        var kueri = "SELECT * FROM algoritma WHERE id_algor = '"+reqGetData+"'";
+        var kueri = "SELECT * FROM perangkat_eit WHERE id_alat = '"+reqGetData+"'";
       }else{
-        var kueri = 'SELECT * FROM algoritma WHERE status = 1';
+        var kueri = 'SELECT * FROM perangkat_eit';
       }
       con.query(kueri, function(err, result) {
         con.release();
@@ -20,8 +20,8 @@ function Image() {
 
   this.post = function(req, res) {
     connection.acquire(function(err, con) {
-      var creds = [req.nama_algor];
-      var query = 'insert into algoritma (nama_algor) values (?)';
+      var creds = [req.body.nama_data, req.body.filename, req.body.arus_injeksi];
+      var query = 'INSERT INTO perangkat_eit (nama_data, filename, arus_injeksi) VALUES (?, ?, ?)';
 
       con.query(query, creds, function(err, result) {
         con.release();
@@ -35,9 +35,9 @@ function Image() {
   };
 
   this.put = function(req, res) {
-    var data = [req.nama_algor, parseInt(req.id_algor)];
+    var data = [req.alamat_data, parseInt(req.id_data)];
     connection.acquire(function(err, con) {
-      var query = 'UPDATE algoritma SET nama_algor = ? WHERE id_algor = ?';
+      var query = 'UPDATE perangkat_eit SET alamat_data = ? WHERE id_data = ?';
       con.query(query, data, function(err, result) {
         con.release();
         if (err) {
@@ -51,7 +51,7 @@ function Image() {
 
   this.delete = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('delete from algoritma where id_algor = ?', [id], function(err, result) {
+      con.query('delete from perangkat_eit where id_data = ?', [id], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 0, message: 'Delete failed'});
@@ -64,4 +64,4 @@ function Image() {
 
 }
 
-module.exports = new Image();
+module.exports = new Perangkat();
