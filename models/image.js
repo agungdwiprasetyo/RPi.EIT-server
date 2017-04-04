@@ -46,7 +46,7 @@ function Image() {
 
   this.delete = function(req, res) {
     var data = [req.filename];
-    var alamat = "rpieit-web/img/results/"+req.filename;
+    var alamat = "RPi.EIT-web/img/results/"+req.filename;
     fs.unlink(alamat, (err) => {
       if (err) throw err;
       console.log('successfully deleted '+req.filename);

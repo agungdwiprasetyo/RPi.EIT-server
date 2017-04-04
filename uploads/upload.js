@@ -4,7 +4,7 @@ var connection = require('../connectDB');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    var dest = './rpieit-web/data';
+    var dest = './RPi.EIT-web/data';
     mkdirp(dest, function (err) {
         if (err) cb(err, dest);
         else cb(null, dest);

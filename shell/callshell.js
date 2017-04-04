@@ -2,7 +2,7 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 
 module.exports.start = function() {
-	exec('./rpieit-algorithms/main.py', function(error, stdout, stderr) {
+	exec('./RPi.EIT-algorithms/main.py', function(error, stdout, stderr) {
 		if(error){
 			console.log("Program error gan");
 			// return

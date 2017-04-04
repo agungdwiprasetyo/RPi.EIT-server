@@ -24,7 +24,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(express.static(__dirname + '/rpieit-web'));
+app.use(express.static(__dirname + '/RPi.EIT-web'));
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 

@@ -3,16 +3,17 @@
 HERE=`pwd`
 NODE_MODULES=$HERE/node_modules
 
-ALGORITHMS=$HERE/rpieit-algorithms
-HARDWARE=$HERE/rpieit-hardware
-WEB=$HERE/rpieit-web
+ALGORITHMS=$HERE/RPi.EIT-algorithms
+HARDWARE=$HERE/RPi.EIT-hardware
+WEB=$HERE/RPi.EIT-web
 
 install_dependencies(){
 	npm install
 }
 
 run_server(){
-	npm start
+	# npm start
+	pm2 start app.js --watch
 }
 
 check_app(){
@@ -21,9 +22,20 @@ check_app(){
 	# echo $WEB
 
 	if [ -d $ALGORITHMS ]; then
-		echo -e "Program for image reconstruction was exist\n"
+		echo -e "Program for image reconstruction is exist\n"
 	else
 		echo -e "Error, program for image reconstruction don't exist, application terminated\n"
+		echo -e "Cloning RPi.EIT-algorithms..."
+		git clone https://github.com/agungdwiprasetyo/RPi.EIT-algorithms
+		exit
+	fi
+
+	if [ -d $WEB ]; then
+		echo -e "Program for web is exist\n"
+	else
+		echo -e "Error, web source don't exist, application terminated\n"
+		echo -e "Cloning RPi.EIT-web..."
+		git clone https://github.com/agungdwiprasetyo/RPi.EIT-web
 		exit
 	fi
 }
