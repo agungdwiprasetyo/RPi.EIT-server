@@ -35,9 +35,17 @@ function Image() {
   };
 
   this.put = function(req, res) {
-    var data = [req.alamat_data, parseInt(req.id_data)];
-    connection.acquire(function(err, con) {
+    if(req.citra){
+      var data = [req.citra, parseInt(req.id_data)];
+      var query = 'UPDATE data_ukur SET citra = ? WHERE id_data = ?';
+    }else if(req.model){
+      var data = [req.model, parseInt(req.id_data)];
+      var query = 'UPDATE data_ukur SET model = ? WHERE id_data = ?';
+    }else{
+      var data = [req.alamat_data, parseInt(req.id_data)];
       var query = 'UPDATE data_ukur SET alamat_data = ? WHERE id_data = ?';
+    }
+    connection.acquire(function(err, con) {
       con.query(query, data, function(err, result) {
         con.release();
         if (err) {

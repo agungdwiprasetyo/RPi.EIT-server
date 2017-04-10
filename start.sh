@@ -12,8 +12,8 @@ install_dependencies(){
 }
 
 run_server(){
-	# npm start
-	pm2 start app.js --watch
+	npm start
+	#pm2 start app.js --watch
 }
 
 check_app(){
@@ -22,30 +22,28 @@ check_app(){
 	# echo $WEB
 
 	if [ -d $ALGORITHMS ]; then
-		echo -e "Program for image reconstruction is exist\n"
+		echo -e "> Program for image reconstruction is exist"
 	else
-		echo -e "Error, program for image reconstruction don't exist, application terminated\n"
-		echo -e "Cloning RPi.EIT-algorithms..."
+		echo -e "> Program for image reconstruction don't exist,"
+		echo -e "> Cloning RPi.EIT-algorithms..."
 		git clone https://github.com/agungdwiprasetyo/RPi.EIT-algorithms
-		exit
 	fi
 
 	if [ -d $WEB ]; then
-		echo -e "Program for web is exist\n"
+		echo -e "> Program for web is exist\n"
 	else
-		echo -e "Error, web source don't exist, application terminated\n"
-		echo -e "Cloning RPi.EIT-web..."
+		echo -e "> Web source don't exist"
+		echo -e "> Cloning RPi.EIT-web..."
 		git clone https://github.com/agungdwiprasetyo/RPi.EIT-web
-		exit
 	fi
 }
 
 run_app(){
 	if [ -d $NODE_MODULES ]; then
-		echo -e "Node modules installed, running server\n"
+		echo -e "> Node modules installed, running server\n"
 		run_server
 	else
-		echo -e "Installing node modules...\n"
+		echo -e "> Installing node modules...\n"
 		install_dependencies
 	fi
 }

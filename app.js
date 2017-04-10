@@ -8,7 +8,7 @@ var imageRoute = require('./routes/image');
 var dataRoute = require('./routes/data');
 var dataAlgor = require('./routes/algor');
 var perangkatEIT = require('./routes/perangkat');
-var shell = require('./shell/callshell');
+var callPython = require('./shell/callPython');
 var upload = require('./uploads/upload');
 var port = process.env.PORT || 1993;
 
@@ -29,7 +29,7 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
 
 connectDB.init();
-shell.start();
+callPython.start();
 
 imageRoute.configure(app);
 dataRoute.configure(app);

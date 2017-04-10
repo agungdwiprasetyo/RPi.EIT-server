@@ -11,7 +11,7 @@ module.exports.listen = function(server) {
 
 	io.on('connection', function(socket){
 		socket.on('raspiConnect', function(data){
-            clients[0].raspiId = data['id_alat'];
+            clients[0].raspiId = socket.id;
             clients[0].status = data['status'];
             clients[0].token = data['token'];
 
