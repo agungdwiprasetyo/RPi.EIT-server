@@ -8,6 +8,7 @@ module.exports.listen = function(server) {
 	var num = 0;
 	var clients = [{raspiId: '', status: false, token: ''}, {webId: '', status: false}, {androidId: '', status: false}];
 	var realtimeEIT = {algor: '', arus: '', kerapatan: '', data: ''};
+	var session = "";
 
 	io.on('connection', function(socket){
 		socket.on('raspiConnect', function(data){
@@ -29,8 +30,9 @@ module.exports.listen = function(server) {
 			numClient++;
       		console.log("Connected web = " + clients[1].webId + " User = " + numClient);
       		console.log(clients);
-			socket.emit('raspiStatus', {
-				online: clients[0].status
+			socket.emit('webStatus', {
+				token: clients[1].webId,
+				piOnline: clients[0].status
 			});
 		});
 		socket.on('androidConnect', function(data){
@@ -53,13 +55,16 @@ module.exports.listen = function(server) {
 		});
 		socket.on('finishReconstruction', function(data){
 			console.log("data image baru: "+data['filename']);
+			console.log(data.session+"\n");
+			console.log(data.token);
 			socket.broadcast.emit('notifFinish', data);
 		});
 
 		socket.on('startGetData', function(data){
 			socket.broadcast.emit('getDataVoltage', {
 				status: clients[0].status,
-				token: clients[0].token
+				token: clients[0].token,
+				webToken: data['token']
 			});
 		});
 		socket.on('postDataVoltage', function(data){
