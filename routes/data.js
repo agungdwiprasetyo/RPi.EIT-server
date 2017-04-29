@@ -14,8 +14,8 @@ module.exports = {
 	      data.put(req.body, res);
 	    });
 
-	    app.delete('/data/:id/', function(req, res) {
-	      data.delete(req.params.id, res);
+	    app.delete('/data', function(req, res) {
+	      data.delete(req.body, res);
 	    });
 	}
 };

@@ -1,5 +1,6 @@
 var connection = require('../connectDB');
 var socketio = require('../socket/socket-io');
+var fs = require('fs');
 
 function Image() {
 
@@ -9,7 +10,7 @@ function Image() {
       if(reqGetData){
         var kueri = "SELECT * FROM data_ukur WHERE filename = '"+reqGetData+"'";
       }else{
-        var kueri = 'SELECT * FROM data_ukur';
+        var kueri = 'SELECT * FROM data_ukur ORDER BY id_data DESC';
       }
       con.query(kueri, function(err, result) {
         con.release();
@@ -36,6 +37,7 @@ function Image() {
 
   this.put = function(req, res) {
     if(req.citra){
+      if(req.citra=="apus") req.citra = "";
       var data = [req.citra, parseInt(req.id_data)];
       var query = 'UPDATE data_ukur SET citra = ? WHERE id_data = ?';
     }else if(req.model){
@@ -57,9 +59,15 @@ function Image() {
     });
   };
 
-  this.delete = function(id, res) {
+  this.delete = function(req, res) {
+    var data = [req.id];
+    var alamat = "./RPi.EIT-web/dataObjek/"+req.filename;
+    fs.unlink(alamat, (err) => {
+      if (err) throw err;
+      console.log('successfully deleted '+req.filename);
+    });
     connection.acquire(function(err, con) {
-      con.query('delete from data_ukur where id_data = ?', [id], function(err, result) {
+      con.query('delete from data_ukur where id_data = ?', [data], function(err, result) {
         con.release();
         if (err) {
           res.send({status: 0, message: 'Delete failed'});

@@ -25,7 +25,7 @@ var storageModel = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     console.log("req file",req.body);
-    cb(null, req.body.filename);
+    cb(null, file.originalname);
   }
 });
 
@@ -35,8 +35,8 @@ var uploadModel = multer({ storage: storageModel });
 module.exports.configure = function(app){
   app.post('/uploaddata', uploadData.any(), function(req , res){
     connection.acquire(function(err, con) {
-      var creds = [req.body.nama_data, req.body.filename, req.body.arus_injeksi];
-      var query = 'INSERT INTO data_ukur (nama_data, filename, arus_injeksi) VALUES (?, ?, ?)';
+      var creds = [req.body.nama_data, req.body.filename, req.body.arus_injeksi, req.body.deskripsi];
+      var query = 'INSERT INTO data_ukur (nama_data, filename, arus_injeksi, deskripsi) VALUES (?, ?, ?, ?)';
 
       con.query(query, creds, function(err, result) {
         con.release();

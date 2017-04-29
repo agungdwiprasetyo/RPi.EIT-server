@@ -48,6 +48,7 @@ module.exports.listen = function(server) {
 		});
 
 		socket.on('runReconstruction', function(data){
+			// console.log("Starting reconstruction: ");
 			// console.log(data);
 			if(data['status']){
 				socket.broadcast.emit('startReconstruction', data);
