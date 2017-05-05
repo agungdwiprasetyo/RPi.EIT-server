@@ -25,7 +25,7 @@ var storageModel = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     console.log("req file",req.body);
-    cb(null, file.originalname);
+    cb(null, req.body.model);
   }
 });
 
